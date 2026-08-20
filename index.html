@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>San Rafael Waste Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #333;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    img {
+      width: 240px;
+      max-width: 80%;
+      margin-bottom: 40px;
+      border-radius: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      padding: 14px 0;
+      margin: 12px auto;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    #leadFormContainer {
+      display: none;
+      width: 90%;
+      max-width: 360px;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 14px;
+      background: #f9f9f9;
+      text-align: left;
+    }
+
+    form label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    form input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    form input[type="submit"] {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 480px) {
+      img { width: 70%; }
+      .btn { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="srhwtsplash.jpg" alt="San Rafael Waste Management Logo">
+
+  <button class="btn" onclick="downloadVCARD()">Add San Rafael Waste Management to Contacts</button>
+  <button class="btn" onclick="showForm()">Share Your Contact With Us</button>
+
+  <div id="leadFormContainer">
+    <form id="leadForm">
+      <label for="name">Name*</label>
+      <input type="text" name="Name" id="name" required>
+
+      <label for="phone">Phone*</label>
+      <input type="text" name="Phone" id="phone" required>
+
+      <label for="phone2">Phone 2 (optional)</label>
+      <input type="text" name="Phone2" id="phone2">
+
+      <label for="email">Email (optional)</label>
+      <input type="email" name="Email" id="email">
+
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+
+  <script>
+    function showForm() {
+      document.getElementById('leadFormContainer').style.display = 'block';
+      document.getElementById('leadFormContainer').scrollIntoView({ behavior: "smooth" });
+    }
+
+    function downloadVCARD() {
+      const link = document.createElement('a');
+      link.href = 'contact.vcf';
+      link.download = 'SanRafael.vcf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    const form = document.getElementById("leadForm");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const action = "https://script.google.com/macros/s/AKfycbwkNGavAMPwmyj1HA9Kz7eBtykQ2rN2jF7GQ4PKPhunOpnqB7UFWhWXbGZbAs8o5qET/exec"
+      // REPLACE THE URL BELOW WITH YOUR NEW DEPLOYMENT URL
+      fetch(action, {
+        method: "POST",
+        body: new URLSearchParams(data)
+      })
+      .then(() => {
+        alert("Thank you! Your contact has been submitted.");
+        form.reset();
+        document.getElementById('leadFormContainer').style.display = 'none';
+      })
+      .catch(error => {
+        alert("Submission processed.");
+        form.reset();
+      });
+    });
+  </script>
+
+</body>
+</html>
